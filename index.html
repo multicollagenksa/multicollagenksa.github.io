@@ -11,7 +11,7 @@
   <link rel="preload" as="image" href="/assets/hero-skin-480.webp?v=20261003-fast1" imagesrcset="/assets/hero-skin-480.webp?v=20261003-fast1 480w, /assets/hero-skin-800.webp?v=20261003-fast1 800w" imagesizes="(max-width:600px) 48vw, 390px" type="image/webp" fetchpriority="high">
   <link rel="preload" as="image" href="/assets/hero-hair-20261004-480.webp" imagesrcset="/assets/hero-hair-20261004-480.webp 480w, /assets/hero-hair-20261004-800.webp 800w" imagesizes="(max-width:600px) 48vw, 390px" type="image/webp" fetchpriority="high">
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261003-columns2">
+  <link rel="stylesheet" href="styles.css?v=20261004-cta">
 </head>
 <body>
   <div class="top-proof" role="region" aria-label="مزايا الطلب">
@@ -56,8 +56,8 @@
           </div>
           <figcaption>
             <span class="result-card__tag">الشعر</span>
-            <strong>العناية بالشعر في صورة أوضح</strong>
-            <small>نفس التصميم الذي اخترتِه، بتقديم بصري أكثر أناقة</small>
+            <strong>عناية تكمّل روتين شعرك</strong>
+            <small>خطوة بسيطة في روتين العناية</small>
           </figcaption>
         </figure>
       </a>
@@ -68,17 +68,17 @@
         <span><b>✓</b> باقات توفير متعددة</span>
       </div>
 
-      <a class="results-hero__cta" href="#order">
-        <span>اختاري باقتك الآن</span>
-        <small>التوصيل مجاني · الدفع عند الاستلام</small>
-      </a>
+      <div class="hero-action">
+        <a class="purchase-link" href="#order"><span>اختاري باقتك ووفّري</span><svg class="purchase-link__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6"/></svg></a>
+        <p class="purchase-note">توصيل مجاني · الدفع عند الاستلام</p>
+      </div>
     </section>
 
     <section class="order-section" id="order">
       <div class="order-wrap">
         <div class="intro">
           <span class="order-kicker">MULTI COLLAGEN PEPTIDES</span>
-          <h1>اختاري باقتك ووفّري أكثر ✨</h1>
+          <h2>اختاري باقتك ووفّري</h2>
         </div>
 
         <form id="order-form" class="order-card">
@@ -123,7 +123,7 @@
             <div><b>الدفع عند الاستلام · التوصيل مجاني</b></div>
           </div>
 
-          <button class="submit" type="submit">أطلبي الآن — الدفع عند الاستلام</button>
+          <button class="submit" type="submit">تأكيد الطلب</button>
           <p class="check-note">نتواصل معك لتأكيد الطلب والتوصيل.</p>
           <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
         </form>
@@ -142,8 +142,14 @@
       <img width="1536" height="1024" src="/assets/page-07.webp?v=20261003-fast1" alt="صورة 10 من صفحة Multi Collagen Peptides" loading="lazy" decoding="async" fetchpriority="low">
     </section>
 
+    <section class="closing-order" aria-labelledby="closing-order-title">
+      <span class="closing-order__eyebrow">MULTI COLLAGEN PEPTIDES</span>
+      <h2 id="closing-order-title">اختاري العناية التي تناسب روتينك</h2>
+      <p>عبوة، عبوتان أو ثلاث — اختاري باقتك وأكملي طلبك.</p>
+      <a class="purchase-link" href="#order"><span>اختاري باقتك ووفّري</span><svg class="purchase-link__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6"/></svg></a>
+      <p class="purchase-note">توصيل مجاني · الدفع عند الاستلام</p>
+    </section>
   </main>
-  <a class="sticky-order" href="#order" aria-label="احجزي باقتك الآن وانتقلي إلى نموذج الطلب"><span class="sticky-text">أطلبي الآن و استفيدي من عرض التوفير</span><span class="sticky-arrow" aria-hidden="true">↓</span></a>
-  <script src="app.js?v=20261002-dedupe1" defer></script>
+  <script src="app.js?v=20261004-cta" defer></script>
 </body>
 </html>

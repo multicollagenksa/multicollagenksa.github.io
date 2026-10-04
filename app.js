@@ -94,50 +94,7 @@ orderForm.addEventListener('submit', async event => {
     orderForm.innerHTML = '<div class="success"><span>✓</span><h2>تم استلام طلبك</h2><p>شكرًا لك. سيُستخدم رقم هاتفك للتواصل معك وتأكيد بيانات الطلب.</p></div>';
   } catch (error) {
     button.disabled = false;
-    button.textContent = 'إرسال الطلب - الدفع عند الاستلام';
+    button.textContent = 'تأكيد الطلب';
     status.textContent = 'تعذر إرسال الطلب الآن. تحققي من اتصال الإنترنت وحاولي مرة أخرى.';
   }
 });
-
-/* زر الوصول السريع إلى الطلب على الهاتف */
-const stickyOrderButton = document.querySelector('.sticky-order');
-const orderSection = document.getElementById('order');
-
-if (stickyOrderButton && orderSection) {
-  let stickyOrderDismissed = false;
-
-  const hideStickyOrder = () => {
-    if (stickyOrderDismissed) return;
-    stickyOrderDismissed = true;
-    stickyOrderButton.classList.add('is-hidden');
-  };
-
-  const checkCheckoutPosition = () => {
-    if (stickyOrderDismissed) return;
-    const rect = orderSection.getBoundingClientRect();
-    const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-
-    if (rect.top <= viewportHeight * 0.88) {
-      hideStickyOrder();
-    }
-  };
-
-  stickyOrderButton.addEventListener('click', event => {
-    event.preventDefault();
-    hideStickyOrder();
-    orderSection.scrollIntoView({behavior: 'smooth', block: 'start'});
-  });
-
-  orderSection.addEventListener('focusin', hideStickyOrder);
-  orderSection.addEventListener('pointerdown', hideStickyOrder, {passive: true});
-
-  window.addEventListener('scroll', checkCheckoutPosition, {passive: true});
-  window.addEventListener('resize', checkCheckoutPosition, {passive: true});
-
-  if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', checkCheckoutPosition, {passive: true});
-    window.visualViewport.addEventListener('scroll', checkCheckoutPosition, {passive: true});
-  }
-
-  requestAnimationFrame(checkCheckoutPosition);
-}
