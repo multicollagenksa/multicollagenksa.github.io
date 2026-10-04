@@ -10,105 +10,170 @@ const CONFIG = {
   ]
 };
 
+function trackEvent(eventName, data) {
+  try {
+    if (typeof window.snaptr !== 'function') return false;
+    window.snaptr('track', eventName, data);
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
 (function initSnapPixel(){
   if (!CONFIG.snapPixelId) return;
-  (function(e,t,n){
-    if(e.snaptr)return;
-    var a=e.snaptr=function(){a.handleRequest?a.handleRequest.apply(a,arguments):a.queue.push(arguments)};
-    a.queue=[];
-    var r=t.createElement('script');
-    r.async=true;
-    r.src=n;
-    var u=t.getElementsByTagName('script')[0];
-    u.parentNode.insertBefore(r,u);
-  })(window,document,'https://sc-static.net/scevent.min.js');
-  window.snaptr('init', CONFIG.snapPixelId);
-  window.snaptr('track', 'PAGE_VIEW', {item_ids:[CONFIG.sku]});
+  try {
+    (function(e,t,n){
+      if(e.snaptr)return;
+      var a=e.snaptr=function(){a.handleRequest?a.handleRequest.apply(a,arguments):a.queue.push(arguments)};
+      a.queue=[];
+      var r=t.createElement('script');
+      r.async=true;
+      r.src=n;
+      var u=t.getElementsByTagName('script')[0];
+      u.parentNode.insertBefore(r,u);
+    })(window,document,'https://sc-static.net/scevent.min.js');
+    window.snaptr('init', CONFIG.snapPixelId);
+    trackEvent('PAGE_VIEW', {item_ids:[CONFIG.sku]});
+  } catch (_) {}
 })();
 
 const orderForm = document.getElementById('order-form');
 let checkoutTracked = false;
+let orderSubmitting = false;
+let orderSubmitted = false;
+let pendingOrder = null;
+
+function selectedOffer(values) {
+  const code = Number(values.get('offer'));
+  return Number.isInteger(code) && code >= 1 && code <= CONFIG.offers.length
+    ? {code, ...CONFIG.offers[code - 1]} : null;
+}
+
+function normalizeSaudiPhone(value) {
+  let phone = String(value || '').trim()
+    .replace(/[٠-٩]/g, digit => String('٠١٢٣٤٥٦٧٨٩'.indexOf(digit)))
+    .replace(/[۰-۹]/g, digit => String('۰۱۲۳۴۵۶۷۸۹'.indexOf(digit)))
+    .replace(/[\s()\-\u200e\u200f\u061c]/g, '');
+  if (phone.startsWith('+966')) phone = '0' + phone.slice(4);
+  else if (phone.startsWith('00966')) phone = '0' + phone.slice(5);
+  else if (phone.startsWith('966')) phone = '0' + phone.slice(3);
+  else if (/^5\d{8}$/.test(phone)) phone = '0' + phone;
+  return /^05\d{8}$/.test(phone) ? phone : null;
+}
 
 function trackStartCheckout() {
-  if (checkoutTracked || !window.snaptr) return;
-  const values = new FormData(orderForm);
-  const selected = CONFIG.offers[Number(values.get('offer')) - 1];
+  if (checkoutTracked || orderSubmitted) return;
+  const selected = selectedOffer(new FormData(orderForm));
   if (!selected) return;
-
-  checkoutTracked = true;
-  window.snaptr('track', 'START_CHECKOUT', {
-    price: selected.price,
-    currency: 'SAR',
-    item_ids: [CONFIG.sku]
+  checkoutTracked = trackEvent('START_CHECKOUT', {
+    price: selected.price, currency: 'SAR', item_ids: [CONFIG.sku]
   });
 }
 
-orderForm.addEventListener('focusin', trackStartCheckout, {once: true});
-orderForm.addEventListener('change', trackStartCheckout, {once: true});
+orderForm.addEventListener('focusin', trackStartCheckout);
+orderForm.addEventListener('change', trackStartCheckout);
+orderForm.addEventListener('input', event => {
+  if (typeof event.target.setCustomValidity === 'function') {
+    event.target.setCustomValidity('');
+    event.target.removeAttribute('aria-invalid');
+  }
+});
 
 orderForm.addEventListener('submit', async event => {
   event.preventDefault();
+  if (orderSubmitting || orderSubmitted) return;
 
   const status = document.getElementById('form-message');
   const button = orderForm.querySelector('.submit');
+  const values = new FormData(orderForm);
+  const selected = selectedOffer(values);
+  const name = String(values.get('name') || '').trim();
+  const address = String(values.get('address') || '').trim();
+  const phone = normalizeSaudiPhone(values.get('phone'));
   status.textContent = '';
 
-  const values = new FormData(orderForm);
-  const selected = CONFIG.offers[Number(values.get('offer')) - 1];
-  const phone = String(values.get('phone') || '').trim();
-
-  if (phone.replace(/\D/g,'').length < 8) {
-    status.textContent = 'تحققي من رقم الهاتف ثم حاولي مرة أخرى.';
+  const problems = [
+    ['name', name.length < 2 ? 'أدخلي الاسم الكامل.' : ''],
+    ['phone', !phone ? 'أدخلي رقم جوال سعودي صحيحًا، مثل 05xxxxxxxx.' : ''],
+    ['address', !address ? 'أدخلي المدينة والحي والعنوان.' : '']
+  ];
+  for (const [fieldName, message] of problems) {
+    const field = orderForm.elements.namedItem(fieldName);
+    if (!field || typeof field.setCustomValidity !== 'function') continue;
+    field.setCustomValidity(message);
+    if (message) field.setAttribute('aria-invalid', 'true');
+    else field.removeAttribute('aria-invalid');
+  }
+  if (!orderForm.reportValidity()) return;
+  if (!selected) {
+    status.textContent = 'اختاري الباقة المناسبة ثم أكّدي طلبك.';
     return;
   }
 
-  const transactionId = 'COSMA-' + Date.now() + '-' + Math.random().toString(36).slice(2,10).toUpperCase();
-
-  const payload = {
-    transactionId,
-    product: CONFIG.product,
-    name: String(values.get('name') || '').trim(),
-    phone,
-    address: String(values.get('address') || '').trim(),
-    offerCode: Number(values.get('offer')),
-    offer: selected.label,
-    price: selected.price,
-    country: 'SA',
-    sku: CONFIG.sku,
-    currency: 'SAR',
-    pageUrl: window.location.href,
-    source: 'Cosma Collagen Landing Page'
+  const details = {
+    product: CONFIG.product, name, phone, address,
+    offerCode: selected.code, offer: selected.label, price: selected.price,
+    country: 'SA', sku: CONFIG.sku, currency: 'SAR',
+    pageUrl: window.location.href, source: 'Cosma Collagen Landing Page'
   };
+  const fingerprint = JSON.stringify(details);
+  if (!pendingOrder || pendingOrder.fingerprint !== fingerprint) {
+    pendingOrder = {
+      fingerprint,
+      transactionId: 'COSMA-' + Date.now() + '-' + Math.random().toString(36).slice(2, 10).toUpperCase()
+    };
+  }
+  const payload = {
+    ...details,
+    transactionId: pendingOrder.transactionId,
+    utm: Object.fromEntries(new URLSearchParams(window.location.search))
+  };
+
   trackStartCheckout();
-
+  orderSubmitting = true;
+  const inputs = [...orderForm.querySelectorAll('input')];
+  inputs.forEach(input => { input.disabled = true; });
   button.disabled = true;
-  button.textContent = 'جارٍ إرسال طلبك…';
+  button.textContent = 'جارٍ تأكيد طلبك…';
+  orderForm.setAttribute('aria-busy', 'true');
 
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 30000);
   try {
-    await fetch(CONFIG.scriptUrl, {
+    const response = await fetch(CONFIG.scriptUrl, {
       method: 'POST',
-      mode: 'no-cors',
-      headers: {'Content-Type':'text/plain;charset=utf-8'},
-      body: JSON.stringify({
-        ...payload,
-        utm: Object.fromEntries(new URLSearchParams(window.location.search))
-      })
+      mode: 'cors',
+      credentials: 'omit',
+      headers: {'Content-Type': 'text/plain;charset=utf-8'},
+      body: JSON.stringify(payload),
+      signal: controller.signal
     });
+    if (!response.ok) throw new Error('http-error');
+    const result = await response.json();
+    if (!result || result.ok !== true) throw new Error('order-rejected');
 
-    if (window.snaptr && selected) {
-      window.snaptr('track', 'PURCHASE', {
-        price: selected.price,
-        currency: 'SAR',
-        transaction_id: transactionId,
-        item_ids: [CONFIG.sku]
-      });
-    }
-
-    orderForm.innerHTML = '<div class="success"><span>✓</span><h2>تم استلام طلبك</h2><p>شكرًا لك. سنتواصل معك لتأكيد بيانات الطلب.</p></div>';
+    orderSubmitted = true;
+    orderForm.innerHTML = '<div class="success" role="status" tabindex="-1"><span>✓</span><h2>تم استلام طلبك</h2><p>شكرًا لك. سنتواصل معك لتأكيد بيانات الطلب.</p></div>';
+    orderForm.querySelector('.success')?.focus({preventScroll:true});
+    trackEvent('PURCHASE', {
+      price: selected.price,
+      currency: 'SAR',
+      transaction_id: payload.transactionId,
+      client_dedup_id: payload.transactionId,
+      item_ids: [CONFIG.sku]
+    });
   } catch (error) {
+    inputs.forEach(input => { input.disabled = false; });
     button.disabled = false;
     button.textContent = 'إرسال الطلب - الدفع عند الاستلام';
-    status.textContent = 'تعذر إرسال الطلب الآن. تحققي من اتصال الإنترنت وحاولي مرة أخرى.';
+    status.textContent = error.name === 'AbortError'
+      ? 'تأخر رد الخدمة. إذا سبق إرسال الطلب، انتظري اتصال التأكيد قبل تكراره.'
+      : 'تعذر التأكد من تسجيل الطلب. راجعي البيانات وحاولي مرة أخرى.';
+  } finally {
+    clearTimeout(timeout);
+    orderSubmitting = false;
+    orderForm.removeAttribute('aria-busy');
   }
 });
 
@@ -117,35 +182,29 @@ const orderSection = document.getElementById('order');
 
 if (stickyOrderButton && orderSection) {
   let dismissed = false;
-
   const hideSticky = () => {
     if (dismissed) return;
     dismissed = true;
     stickyOrderButton.classList.add('is-hidden');
   };
-
   const checkCheckout = () => {
     if (dismissed) return;
     const rect = orderSection.getBoundingClientRect();
     const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
     if (rect.top <= vh * .88) hideSticky();
   };
-
   stickyOrderButton.addEventListener('click', event => {
     event.preventDefault();
     hideSticky();
     orderSection.scrollIntoView({behavior:'smooth',block:'start'});
   });
-
   orderSection.addEventListener('focusin', hideSticky);
   orderSection.addEventListener('pointerdown', hideSticky, {passive:true});
   window.addEventListener('scroll', checkCheckout, {passive:true});
   window.addEventListener('resize', checkCheckout, {passive:true});
-
   if (window.visualViewport) {
     window.visualViewport.addEventListener('resize', checkCheckout, {passive:true});
     window.visualViewport.addEventListener('scroll', checkCheckout, {passive:true});
   }
-
   requestAnimationFrame(checkCheckout);
 }
