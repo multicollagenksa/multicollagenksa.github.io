@@ -153,7 +153,9 @@ orderForm.addEventListener('submit', async event => {
     orderForm.querySelector('.success').focus({preventScroll: true});
     trackEvent('PURCHASE', {
       price: selected.price, currency: 'SAR',
-      transaction_id: payload.transactionId, item_ids: [CONFIG.sku]
+      transaction_id: payload.transactionId,
+      client_dedup_id: payload.transactionId,
+      item_ids: [CONFIG.sku]
     });
   } catch (error) {
     inputs.forEach(input => { input.disabled = false; });
