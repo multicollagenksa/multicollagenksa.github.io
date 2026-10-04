@@ -11,7 +11,12 @@
   <link rel="preload" as="image" href="/assets/hero-skin-480.webp?v=20261003-fast1" imagesrcset="/assets/hero-skin-480.webp?v=20261003-fast1 480w, /assets/hero-skin-800.webp?v=20261003-fast1 800w" imagesizes="(max-width:600px) 48vw, 390px" type="image/webp" fetchpriority="high">
   <link rel="preload" as="image" href="/assets/hero-hair-20261004-480.webp" imagesrcset="/assets/hero-hair-20261004-480.webp 480w, /assets/hero-hair-20261004-800.webp 800w" imagesizes="(max-width:600px) 48vw, 390px" type="image/webp" fetchpriority="high">
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261004-cta">
+  <link rel="stylesheet" href="styles.css?v=20261004-cta2">
+  <style id="cta-visibility-fix">
+    .hero-action{display:block!important;visibility:visible!important;opacity:1!important;position:relative!important;z-index:10!important}
+    .purchase-link{display:flex!important;visibility:visible!important;opacity:1!important;position:relative!important;z-index:11!important;width:100%!important;min-height:58px!important;background:linear-gradient(135deg,#7d2b62,#602047)!important;color:#fff!important;text-decoration:none!important}
+    .closing-order .purchase-link{display:flex!important;visibility:visible!important;opacity:1!important}
+  </style>
 </head>
 <body>
   <div class="top-proof" role="region" aria-label="مزايا الطلب">
@@ -69,7 +74,7 @@
       </div>
 
       <div class="hero-action">
-        <a class="purchase-link" href="#order"><span>اختاري باقتك ووفّري</span><svg class="purchase-link__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6"/></svg></a>
+        <a class="purchase-link" href="#order" aria-label="اختاري باقتك الآن وانتقلي إلى نموذج الطلب"><span>اختاري باقتك الآن — الدفع عند الاستلام</span><svg class="purchase-link__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6"/></svg></a>
         <p class="purchase-note">توصيل مجاني · الدفع عند الاستلام</p>
       </div>
     </section>
