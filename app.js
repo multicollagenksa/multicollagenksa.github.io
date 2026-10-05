@@ -71,6 +71,10 @@ orderForm.addEventListener('input', event => {
     event.target.setCustomValidity('');
     event.target.removeAttribute('aria-invalid');
   }
+  if (event.target.name === 'phone') {
+    const phoneError = document.getElementById('phone-error');
+    if (phoneError) phoneError.textContent = '';
+  }
 });
 
 orderForm.addEventListener('submit', async event => {
@@ -84,12 +88,13 @@ orderForm.addEventListener('submit', async event => {
   const name = String(values.get('name') || '').trim();
   const address = String(values.get('address') || '').trim();
   const phone = normalizeSaudiPhone(values.get('phone'));
+  const phoneField = orderForm.elements.namedItem('phone');
+  const phoneError = document.getElementById('phone-error');
   status.textContent = '';
 
   const problems = [
-    ['name', name.length < 2 ? 'أدخلي الاسم الكامل.' : ''],
-    ['phone', !phone ? 'أدخلي رقم جوال سعودي صحيحًا، مثل 05xxxxxxxx.' : ''],
-    ['address', !address ? 'أدخلي المدينة والحي والعنوان.' : '']
+    ['name', name.length < 2 ? 'أدخلي الاسم.' : ''],
+    ['address', address.length < 2 ? 'أدخلي المدينة.' : '']
   ];
   for (const [fieldName, message] of problems) {
     const field = orderForm.elements.namedItem(fieldName);
@@ -97,6 +102,18 @@ orderForm.addEventListener('submit', async event => {
     if (message) field.setAttribute('aria-invalid', 'true');
     else field.removeAttribute('aria-invalid');
   }
+
+  if (!phone) {
+    phoneField.setCustomValidity('');
+    phoneField.setAttribute('aria-invalid', 'true');
+    if (phoneError) phoneError.textContent = 'رقم الهاتف غير صحيح';
+    phoneField.focus();
+    return;
+  }
+  phoneField.setCustomValidity('');
+  phoneField.removeAttribute('aria-invalid');
+  if (phoneError) phoneError.textContent = '';
+
   if (!orderForm.reportValidity()) return;
   if (!selected) {
     status.textContent = 'اختاري الباقة المناسبة ثم أكّدي طلبك.';
