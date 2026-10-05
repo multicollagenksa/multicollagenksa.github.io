@@ -45,6 +45,7 @@ let orderSubmitted = false;
 
 const ORDER_GUARD_KEY = 'cosma-collagen:last-submission:v2';
 const ORDER_GUARD_TTL = 30 * 60 * 1000;
+const SNAP_PURCHASE_GUARD_KEY = 'cosma-collagen:last-snap-purchase:v1';
 
 function selectedOffer(values) {
   const code = Number(values.get('offer'));
@@ -102,6 +103,41 @@ function writeOrderGuard(value) {
 
 function createTransactionId() {
   return 'COSMA-' + Date.now() + '-' + Math.random().toString(36).slice(2, 10).toUpperCase();
+}
+
+function trackPurchaseOnce(fingerprint, transactionId, selected) {
+  try {
+    const raw = localStorage.getItem(SNAP_PURCHASE_GUARD_KEY);
+    if (raw) {
+      const previous = JSON.parse(raw);
+      if (
+        previous &&
+        previous.fingerprint === fingerprint &&
+        Date.now() - Number(previous.createdAt || 0) <= ORDER_GUARD_TTL
+      ) {
+        return false;
+      }
+    }
+  } catch (_) {}
+
+  const tracked = trackEvent('PURCHASE', {
+    price: selected.price,
+    currency: 'SAR',
+    transaction_id: transactionId,
+    client_dedup_id: transactionId,
+    item_ids: [CONFIG.sku]
+  });
+
+  if (tracked) {
+    try {
+      localStorage.setItem(SNAP_PURCHASE_GUARD_KEY, JSON.stringify({
+        fingerprint,
+        transactionId,
+        createdAt: Date.now()
+      }));
+    } catch (_) {}
+  }
+  return tracked;
 }
 
 function renderSuccess() {
@@ -218,13 +254,7 @@ orderForm.addEventListener('submit', async event => {
 
     writeOrderGuard({...guard, state: 'sent', sentAt: Date.now()});
     renderSuccess();
-    trackEvent('PURCHASE', {
-      price: selected.price,
-      currency: 'SAR',
-      transaction_id: transactionId,
-      client_dedup_id: transactionId,
-      item_ids: [CONFIG.sku]
-    });
+    trackPurchaseOnce(fingerprint, transactionId, selected);
   } catch (_) {
     // Do not clear the guard here. A POST may already have reached Apps Script
     // even if the browser loses the response. Blocking an immediate retry prevents
