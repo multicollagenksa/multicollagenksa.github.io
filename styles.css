@@ -962,3 +962,29 @@
 .phone-error:not(:empty){
   margin:6px 4px 0;
 }
+
+
+/* ===== Checkout title · 2026-10-05 ===== */
+.checkout-title{
+  margin:0 0 13px;
+  padding:0 2px;
+  text-align:right;
+}
+.checkout-title h3{
+  margin:0 0 5px;
+  color:#4f2b43;
+  font-size:18px;
+  font-weight:800;
+  line-height:1.4;
+}
+.checkout-title p{
+  margin:0;
+  color:#7b6874;
+  font-size:11px;
+  line-height:1.7;
+}
+@media(max-width:600px){
+  .checkout-title{margin-bottom:11px}
+  .checkout-title h3{font-size:17px}
+  .checkout-title p{font-size:10.5px}
+}
