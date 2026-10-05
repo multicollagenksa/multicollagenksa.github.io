@@ -11,7 +11,7 @@
   <link rel="preload" as="image" href="/assets/hero-skin-480.webp?v=20261003-fast1" imagesrcset="/assets/hero-skin-480.webp?v=20261003-fast1 480w, /assets/hero-skin-800.webp?v=20261003-fast1 800w" imagesizes="(max-width:600px) 48vw, 390px" type="image/webp" fetchpriority="high">
   <link rel="preload" as="image" href="/assets/hero-hair-20261004-480.webp" imagesrcset="/assets/hero-hair-20261004-480.webp 480w, /assets/hero-hair-20261004-800.webp 800w" imagesizes="(max-width:600px) 48vw, 390px" type="image/webp" fetchpriority="high">
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261004-cta3">
+  <link rel="stylesheet" href="styles.css?v=20261005-checkout-city-phone">
   <style id="cta-visibility-fix">
     .hero-action{display:block!important;visibility:visible!important;opacity:1!important;position:relative!important;z-index:10!important}
     .purchase-link{display:flex!important;visibility:visible!important;opacity:1!important;position:relative!important;z-index:11!important;width:100%!important;min-height:58px!important;background:linear-gradient(135deg,#7d2b62,#602047)!important;color:#fff!important;text-decoration:none!important}
@@ -118,9 +118,9 @@
           <div class="form-divider"></div>
 
           <div class="fields">
-            <label><span class="visually-hidden">الاسم الكامل</span><input name="name" autocomplete="name" placeholder="الاسم الكامل" required minlength="2"></label>
-            <label><span class="visually-hidden">رقم الهاتف</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="رقم الهاتف" required></label>
-            <label><span class="visually-hidden">العنوان</span><input name="address" autocomplete="street-address" placeholder="المدينة والحي والعنوان" required></label>
+            <label><span>الاسم</span><input name="name" autocomplete="name" required minlength="2"></label>
+            <label class="phone-field"><span>رقم الهاتف</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="14" aria-describedby="phone-error"><small id="phone-error" class="phone-error" role="alert" aria-live="polite"></small></label>
+            <label><span>المدينة</span><input name="address" autocomplete="address-level2" required minlength="2"></label>
           </div>
 
           <div class="cod-note">
@@ -183,6 +183,6 @@
       <p class="purchase-note">توصيل مجاني · الدفع عند الاستلام</p>
     </section>
   </main>
-  <script src="app.js?v=20261004-snapfix1" defer></script>
+  <script src="app.js?v=20261005-checkout-city-phone" defer></script>
 </body>
 </html>
