@@ -42,7 +42,9 @@ const orderForm = document.getElementById('order-form');
 let checkoutTracked = false;
 let orderSubmitting = false;
 let orderSubmitted = false;
-let pendingOrder = null;
+
+const ORDER_GUARD_KEY = 'cosma-collagen:last-submission:v2';
+const ORDER_GUARD_TTL = 30 * 60 * 1000;
 
 function selectedOffer(values) {
   const code = Number(values.get('offer'));
@@ -60,6 +62,52 @@ function normalizeSaudiPhone(value) {
   else if (phone.startsWith('966')) phone = '0' + phone.slice(3);
   else if (/^5\d{8}$/.test(phone)) phone = '0' + phone;
   return /^05\d{8}$/.test(phone) ? phone : null;
+}
+
+function normalizeFingerprintText(value) {
+  return String(value || '').trim().replace(/\s+/g, ' ').toLowerCase();
+}
+
+function makeFingerprint(details) {
+  return [
+    CONFIG.sku,
+    details.phone,
+    details.offerCode,
+    normalizeFingerprintText(details.name),
+    normalizeFingerprintText(details.address)
+  ].join('|');
+}
+
+function readOrderGuard() {
+  try {
+    const raw = localStorage.getItem(ORDER_GUARD_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || !parsed.fingerprint || !parsed.createdAt) return null;
+    if (Date.now() - Number(parsed.createdAt) > ORDER_GUARD_TTL) {
+      localStorage.removeItem(ORDER_GUARD_KEY);
+      return null;
+    }
+    return parsed;
+  } catch (_) {
+    return null;
+  }
+}
+
+function writeOrderGuard(value) {
+  try {
+    localStorage.setItem(ORDER_GUARD_KEY, JSON.stringify(value));
+  } catch (_) {}
+}
+
+function createTransactionId() {
+  return 'COSMA-' + Date.now() + '-' + Math.random().toString(36).slice(2, 10).toUpperCase();
+}
+
+function renderSuccess() {
+  orderSubmitted = true;
+  orderForm.innerHTML = '<div class="success" role="status" tabindex="-1"><span>✓</span><h2>تم استلام طلبك</h2><p>شكرًا لك. سنتواصل معك لتأكيد بيانات الطلب.</p></div>';
+  orderForm.querySelector('.success')?.focus({preventScroll:true});
 }
 
 function trackStartCheckout() {
@@ -110,6 +158,10 @@ orderForm.addEventListener('submit', async event => {
     status.textContent = 'اختاري الباقة المناسبة ثم أكّدي طلبك.';
     return;
   }
+  if (navigator.onLine === false) {
+    status.textContent = 'لا يوجد اتصال بالإنترنت الآن. تحققي من الاتصال ثم أعيدي المحاولة.';
+    return;
+  }
 
   const details = {
     product: CONFIG.product, name, phone, address,
@@ -117,16 +169,30 @@ orderForm.addEventListener('submit', async event => {
     country: 'SA', sku: CONFIG.sku, currency: 'SAR',
     pageUrl: window.location.href, source: 'Cosma Collagen Landing Page'
   };
-  const fingerprint = JSON.stringify(details);
-  if (!pendingOrder || pendingOrder.fingerprint !== fingerprint) {
-    pendingOrder = {
-      fingerprint,
-      transactionId: 'COSMA-' + Date.now() + '-' + Math.random().toString(36).slice(2, 10).toUpperCase()
-    };
+  const fingerprint = makeFingerprint(details);
+  const previous = readOrderGuard();
+
+  // Persistent idempotency guard: the same customer/order cannot be sent twice
+  // from this browser during the protection window, even after refresh/reload.
+  if (previous && previous.fingerprint === fingerprint) {
+    renderSuccess();
+    status?.remove();
+    return;
   }
+
+  const transactionId = createTransactionId();
+  const guard = {
+    fingerprint,
+    transactionId,
+    createdAt: Date.now(),
+    state: 'sending'
+  };
+  writeOrderGuard(guard);
+
   const payload = {
     ...details,
-    transactionId: pendingOrder.transactionId,
+    transactionId,
+    clientOrderId: transactionId,
     utm: Object.fromEntries(new URLSearchParams(window.location.search))
   };
 
@@ -138,40 +204,37 @@ orderForm.addEventListener('submit', async event => {
   button.textContent = 'جارٍ تأكيد طلبك…';
   orderForm.setAttribute('aria-busy', 'true');
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 30000);
   try {
-    const response = await fetch(CONFIG.scriptUrl, {
+    // Apps Script web apps can save the POST successfully while their redirected
+    // response is unreadable by CORS. no-cors avoids showing a false failure that
+    // makes customers press submit again and create a duplicate order.
+    await fetch(CONFIG.scriptUrl, {
       method: 'POST',
-      mode: 'cors',
+      mode: 'no-cors',
       credentials: 'omit',
       headers: {'Content-Type': 'text/plain;charset=utf-8'},
-      body: JSON.stringify(payload),
-      signal: controller.signal
+      body: JSON.stringify(payload)
     });
-    if (!response.ok) throw new Error('http-error');
-    const result = await response.json();
-    if (!result || result.ok !== true) throw new Error('order-rejected');
 
-    orderSubmitted = true;
-    orderForm.innerHTML = '<div class="success" role="status" tabindex="-1"><span>✓</span><h2>تم استلام طلبك</h2><p>شكرًا لك. سنتواصل معك لتأكيد بيانات الطلب.</p></div>';
-    orderForm.querySelector('.success')?.focus({preventScroll:true});
+    writeOrderGuard({...guard, state: 'sent', sentAt: Date.now()});
+    renderSuccess();
     trackEvent('PURCHASE', {
       price: selected.price,
       currency: 'SAR',
-      transaction_id: payload.transactionId,
-      client_dedup_id: payload.transactionId,
+      transaction_id: transactionId,
+      client_dedup_id: transactionId,
       item_ids: [CONFIG.sku]
     });
-  } catch (error) {
+  } catch (_) {
+    // Do not clear the guard here. A POST may already have reached Apps Script
+    // even if the browser loses the response. Blocking an immediate retry prevents
+    // a second row for the same customer/order.
+    writeOrderGuard({...guard, state: 'uncertain', failedAt: Date.now()});
     inputs.forEach(input => { input.disabled = false; });
-    button.disabled = false;
-    button.textContent = 'إرسال الطلب - الدفع عند الاستلام';
-    status.textContent = error.name === 'AbortError'
-      ? 'تأخر رد الخدمة. إذا سبق إرسال الطلب، انتظري اتصال التأكيد قبل تكراره.'
-      : 'تعذر التأكد من تسجيل الطلب. راجعي البيانات وحاولي مرة أخرى.';
+    button.disabled = true;
+    button.textContent = 'تم إرسال محاولة الطلب';
+    status.textContent = 'قد يكون طلبك وصل بالفعل. لمنع تكرار الطلب، لا تعيدي الإرسال الآن. سنتواصل معك إذا تم استلامه.';
   } finally {
-    clearTimeout(timeout);
     orderSubmitting = false;
     orderForm.removeAttribute('aria-busy');
   }
