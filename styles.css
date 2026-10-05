@@ -934,3 +934,31 @@
   .image-cta__button{min-height:52px!important;padding:12px 13px!important;font-size:14px!important;border-radius:12px!important}
   .image-cta small{margin-top:6px;font-size:9px}
 }
+
+
+/* ===== Checkout fields: name, phone, city · 2026-10-05 ===== */
+.fields label>span:not(.visually-hidden){
+  display:block;
+  margin:0 4px 6px;
+  color:#5f4b58;
+  font-size:12px;
+  font-weight:700;
+  text-align:right;
+}
+.fields input[aria-invalid="true"]{
+  border-color:#d94b55!important;
+  box-shadow:0 0 0 3px rgba(217,75,85,.10)!important;
+}
+.phone-error{
+  display:block;
+  min-height:0;
+  margin:0;
+  color:#d43f4a;
+  font-size:12px;
+  font-weight:700;
+  line-height:1.5;
+  text-align:right;
+}
+.phone-error:not(:empty){
+  margin:6px 4px 0;
+}
