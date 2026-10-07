@@ -1122,3 +1122,239 @@
   }
   .hero-collage__image img{object-fit:contain}
 }
+
+
+/* ===== Conversion funnel upgrade · 2026-10-07 ===== */
+.conversion-intro,.routine-section,.faq-section{
+  width:100%;
+  background:#fff;
+}
+.conversion-intro{padding:52px 16px 34px}
+.conversion-intro__inner,.routine-inner,.faq-inner{
+  width:min(720px,100%);
+  margin:0 auto;
+}
+.section-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:28px;
+  padding:5px 12px;
+  border:1px solid #e5cad9;
+  border-radius:999px;
+  background:#fff9fc;
+  color:#76285f;
+  font-size:10px;
+  font-weight:800;
+}
+.conversion-intro h2,.routine-section h2,.faq-section h2{
+  margin:10px auto 7px;
+  color:#4c203c;
+  font-size:clamp(23px,5vw,34px);
+  line-height:1.35;
+  text-align:center;
+}
+.section-lead{
+  max-width:590px;
+  margin:0 auto 22px;
+  color:#766773;
+  font-size:13px;
+  line-height:1.85;
+  text-align:center;
+}
+.benefit-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+.benefit-card{
+  padding:20px 15px;
+  border:1px solid #eadde5;
+  border-radius:18px;
+  background:linear-gradient(180deg,#fff,#fff8fb);
+  box-shadow:0 12px 30px #4f173610;
+  text-align:center;
+}
+.benefit-icon{
+  display:grid;
+  place-items:center;
+  width:38px;
+  height:38px;
+  margin:0 auto 9px;
+  border-radius:50%;
+  background:#f5e3ed;
+  color:#76285f;
+  font-size:18px;
+}
+.benefit-card h3{margin:0 0 5px;color:#54203f;font-size:15px}
+.benefit-card p{margin:0;color:#796b74;font-size:10.5px;line-height:1.7}
+.expectation-card{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  margin-top:13px;
+  padding:15px 16px;
+  border:1px solid #e8d6c2;
+  border-radius:16px;
+  background:linear-gradient(135deg,#fffaf3,#fff);
+}
+.expectation-card__badge{
+  flex:0 0 auto;
+  display:grid;
+  place-items:center;
+  min-width:47px;
+  min-height:28px;
+  padding:4px 7px;
+  border-radius:999px;
+  background:#f0dfc6;
+  color:#775528;
+  font-size:9px;
+  font-weight:800;
+}
+.expectation-card h3{margin:0 0 4px;color:#5d452d;font-size:14px}
+.expectation-card p{margin:0;color:#786b62;font-size:10.5px;line-height:1.75}
+
+.routine-section{
+  padding:42px 16px 46px;
+  background:linear-gradient(180deg,#fff8fb,#fff);
+  border-top:1px solid #f0e3ea;
+  border-bottom:1px solid #f0e3ea;
+  text-align:center;
+}
+.routine-steps{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  margin:21px 0 20px;
+}
+.routine-step{
+  padding:17px 12px;
+  border:1px solid #eadde5;
+  border-radius:16px;
+  background:#fff;
+}
+.routine-step>span{
+  display:grid;
+  place-items:center;
+  width:34px;
+  height:34px;
+  margin:0 auto 9px;
+  border-radius:50%;
+  background:#76285f;
+  color:#fff;
+  font-size:10px;
+  font-weight:800;
+}
+.routine-step b{display:block;color:#54203f;font-size:13px}
+.routine-step small{display:block;margin-top:5px;color:#7b6c76;font-size:9.5px;line-height:1.65}
+.mid-cta{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  width:min(430px,100%);
+  min-height:54px;
+  margin:0 auto;
+  padding:13px 18px;
+  border:1px solid #68204f;
+  border-radius:13px;
+  background:linear-gradient(135deg,#7d2b62,#602047);
+  color:#fff;
+  font-size:15px;
+  font-weight:800;
+  text-decoration:none;
+  box-shadow:0 9px 22px #60204720;
+}
+.mid-cta:hover{background:#572040}
+.mid-cta .purchase-link__icon{width:20px;height:20px}
+
+.faq-section{padding:46px 16px 48px}
+.faq-inner>details{
+  border:1px solid #eadde5;
+  border-radius:13px;
+  background:#fff;
+  margin:8px 0;
+  overflow:hidden;
+}
+.faq-inner summary{
+  position:relative;
+  padding:15px 44px 15px 15px;
+  color:#54203f;
+  font-size:13px;
+  font-weight:800;
+  cursor:pointer;
+  list-style:none;
+}
+.faq-inner summary::-webkit-details-marker{display:none}
+.faq-inner summary::before{
+  content:"+";
+  position:absolute;
+  right:15px;
+  top:50%;
+  transform:translateY(-50%);
+  display:grid;
+  place-items:center;
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  background:#f6e7ef;
+  color:#76285f;
+  font-size:16px;
+  font-weight:500;
+}
+.faq-inner details[open] summary::before{content:"−"}
+.faq-inner details p{
+  margin:0;
+  padding:0 15px 16px 44px;
+  color:#786a74;
+  font-size:11px;
+  line-height:1.8;
+}
+.faq-cta{
+  margin-top:17px;
+  padding:19px 16px;
+  border:1px solid #e7d3df;
+  border-radius:17px;
+  background:linear-gradient(135deg,#fff7fb,#fff);
+  text-align:center;
+}
+.faq-cta strong{display:block;color:#54203f;font-size:17px}
+.faq-cta>span{display:block;margin:3px 0 13px;color:#7a6b74;font-size:10.5px}
+
+@media(max-width:600px){
+  .conversion-intro{padding:36px 12px 27px}
+  .conversion-intro h2,.routine-section h2,.faq-section h2{font-size:23px}
+  .section-lead{font-size:11px;line-height:1.75;margin-bottom:15px}
+  .benefit-grid{grid-template-columns:1fr;gap:8px}
+  .benefit-card{
+    display:grid;
+    grid-template-columns:38px 1fr;
+    grid-template-rows:auto auto;
+    column-gap:10px;
+    padding:12px;
+    text-align:right;
+  }
+  .benefit-icon{grid-row:1 / span 2;margin:0}
+  .benefit-card h3{align-self:end;font-size:13px}
+  .benefit-card p{align-self:start;font-size:10px}
+  .expectation-card{padding:13px 12px}
+  .expectation-card p{font-size:10px}
+  .routine-section{padding:34px 12px 38px}
+  .routine-steps{grid-template-columns:1fr;gap:7px;margin:16px 0}
+  .routine-step{
+    display:grid;
+    grid-template-columns:34px 1fr;
+    grid-template-rows:auto auto;
+    column-gap:10px;
+    padding:11px;
+    text-align:right;
+  }
+  .routine-step>span{grid-row:1 / span 2;margin:0}
+  .routine-step b{font-size:12px}
+  .routine-step small{font-size:9px}
+  .faq-section{padding:35px 12px 40px}
+  .faq-inner summary{padding:13px 40px 13px 12px;font-size:12px}
+  .faq-inner summary::before{right:12px}
+  .faq-inner details p{padding:0 12px 14px 12px;font-size:10px}
+  .faq-cta{padding:16px 12px}
+}
