@@ -1124,3 +1124,26 @@
 }
 
 
+
+/* ===== Hero results image below main hero · 2026-10-07 ===== */
+.hero-results-image{
+  width:min(760px,100%);
+  margin:14px auto 0;
+  border:1px solid #e6d3df;
+  border-radius:24px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 18px 42px #4f17361a,0 2px 0 #ffffff inset;
+}
+.hero-results-image a{display:block;color:inherit;text-decoration:none}
+.hero-results-image img{
+  display:block;
+  width:100%;
+  height:auto;
+  object-fit:contain;
+}
+.hero-results-image a:focus-visible{outline:3px solid #9b6b31;outline-offset:4px;border-radius:24px}
+@media(max-width:600px){
+  .hero-results-image{width:100%;margin-top:10px;border-radius:17px;box-shadow:0 14px 30px #4f173616,0 2px 0 #ffffff inset}
+  .hero-results-image a:focus-visible{border-radius:17px}
+}
