@@ -1147,3 +1147,8 @@
   .hero-results-image{width:100%;margin-top:10px;border-radius:17px;box-shadow:0 14px 30px #4f173616,0 2px 0 #ffffff inset}
   .hero-results-image a:focus-visible{border-radius:17px}
 }
+
+/* ===== Hero product quantity · 2026-10-07 ===== */
+.hero-volume{margin:13px 0 0;color:#6a5060;font-size:15px;font-weight:600;line-height:1.7;letter-spacing:-.1px}
+.hero-volume strong{color:#4f2b43;font-weight:800}
+@media(max-width:600px){.hero-volume{margin-top:10px;font-size:13px;line-height:1.7}}
