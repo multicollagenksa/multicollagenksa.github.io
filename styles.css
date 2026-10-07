@@ -1104,3 +1104,21 @@
   .moved-hero-results__card .result-card figcaption strong{font-size:10.5px}
   .moved-hero-results__card .result-card figcaption small{font-size:7.5px}
 }
+
+/* ===== Hero page-03 premium presentation · 2026-10-07 ===== */
+.hero-collage__image{
+  aspect-ratio: 941 / 1672;
+  max-height: min(78vh, 760px);
+  background:linear-gradient(180deg,#fbf1f6 0,#fff8fb 100%);
+}
+.hero-collage__image img{
+  object-fit:contain;
+  object-position:center;
+}
+@media(max-width:600px){
+  .hero-collage__image{
+    aspect-ratio: 941 / 1350;
+    max-height:none;
+  }
+  .hero-collage__image img{object-fit:contain}
+}
