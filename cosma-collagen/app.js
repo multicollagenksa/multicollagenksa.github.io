@@ -274,30 +274,23 @@ const stickyOrderButton = document.querySelector('.sticky-order');
 const orderSection = document.getElementById('order');
 
 if (stickyOrderButton && orderSection) {
-  let dismissed = false;
-  const hideSticky = () => {
-    if (dismissed) return;
-    dismissed = true;
-    stickyOrderButton.classList.add('is-hidden');
-  };
-  const checkCheckout = () => {
-    if (dismissed) return;
+  const updateStickyVisibility = () => {
     const rect = orderSection.getBoundingClientRect();
     const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-    if (rect.top <= vh * .88) hideSticky();
+    const checkoutVisible = rect.top <= vh * .88 && rect.bottom >= vh * .12;
+    stickyOrderButton.classList.toggle('is-hidden', checkoutVisible);
   };
+
   stickyOrderButton.addEventListener('click', event => {
     event.preventDefault();
-    hideSticky();
     orderSection.scrollIntoView({behavior:'smooth',block:'start'});
   });
-  orderSection.addEventListener('focusin', hideSticky);
-  orderSection.addEventListener('pointerdown', hideSticky, {passive:true});
-  window.addEventListener('scroll', checkCheckout, {passive:true});
-  window.addEventListener('resize', checkCheckout, {passive:true});
+
+  window.addEventListener('scroll', updateStickyVisibility, {passive:true});
+  window.addEventListener('resize', updateStickyVisibility, {passive:true});
   if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', checkCheckout, {passive:true});
-    window.visualViewport.addEventListener('scroll', checkCheckout, {passive:true});
+    window.visualViewport.addEventListener('resize', updateStickyVisibility, {passive:true});
+    window.visualViewport.addEventListener('scroll', updateStickyVisibility, {passive:true});
   }
-  requestAnimationFrame(checkCheckout);
+  requestAnimationFrame(updateStickyVisibility);
 }
