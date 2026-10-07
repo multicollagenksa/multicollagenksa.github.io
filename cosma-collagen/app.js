@@ -274,23 +274,45 @@ const stickyOrderButton = document.querySelector('.sticky-order');
 const orderSection = document.getElementById('order');
 
 if (stickyOrderButton && orderSection) {
+  // Mobile browsers can restore the page from BFCache with the previous
+  // hidden class still applied. Visibility is therefore recalculated from
+  // the actual checkout position, rather than from a one-way dismissed flag.
   const updateStickyVisibility = () => {
     const rect = orderSection.getBoundingClientRect();
     const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-    const checkoutVisible = rect.top <= vh * .88 && rect.bottom >= vh * .12;
+    const checkoutVisible = rect.top < vh * .9 && rect.bottom > vh * .1;
     stickyOrderButton.classList.toggle('is-hidden', checkoutVisible);
   };
 
   stickyOrderButton.addEventListener('click', event => {
     event.preventDefault();
-    orderSection.scrollIntoView({behavior:'smooth',block:'start'});
+    orderSection.scrollIntoView({behavior:'smooth', block:'start'});
   });
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      const entry = entries[0];
+      stickyOrderButton.classList.toggle('is-hidden', entry.isIntersecting);
+    }, {
+      threshold: 0.01,
+      rootMargin: '-10% 0px -10% 0px'
+    });
+    observer.observe(orderSection);
+  }
 
   window.addEventListener('scroll', updateStickyVisibility, {passive:true});
   window.addEventListener('resize', updateStickyVisibility, {passive:true});
+  window.addEventListener('pageshow', updateStickyVisibility);
+  window.addEventListener('hashchange', updateStickyVisibility);
+
   if (window.visualViewport) {
     window.visualViewport.addEventListener('resize', updateStickyVisibility, {passive:true});
     window.visualViewport.addEventListener('scroll', updateStickyVisibility, {passive:true});
   }
-  requestAnimationFrame(updateStickyVisibility);
+
+  requestAnimationFrame(() => {
+    updateStickyVisibility();
+    setTimeout(updateStickyVisibility, 100);
+    setTimeout(updateStickyVisibility, 500);
+  });
 }
