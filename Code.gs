@@ -2,6 +2,14 @@ const SPREADSHEET_ID = '1z06hEE83QGVQbKH19_GNf9XB4JP2hOv1nCnBLbG_ooI';
 const SHEET_NAME = 'Feuil1';
 
 const PRODUCTS = {
+  'SHILAJIT-PLUS': {
+    product: 'SHILAJIT+',
+    packages: {
+      1: {label: 'العبوة الفردية — 1 عبوة / 100 غرام', price: 198},
+      2: {label: 'الباقة الثنائية — عبوتان / 200 غرام', price: 288},
+      3: {label: 'باقة التوفير — 3 عبوات / 300 غرام', price: 324}
+    }
+  },
   'MULTI-COLLAGEN': {
     product: 'Multi Collagen Peptides',
     packages: {
