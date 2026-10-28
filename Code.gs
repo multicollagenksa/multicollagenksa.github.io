@@ -2,6 +2,14 @@ const SPREADSHEET_ID = '1z06hEE83QGVQbKH19_GNf9XB4JP2hOv1nCnBLbG_ooI';
 const SHEET_NAME = 'Feuil1';
 
 const PRODUCTS = {
+  'SHILAJIT': {
+    product: 'Googeer Himalayan Shilajit — GOOGEEER UAE',
+    packages: {
+      1: {label: 'عبوة واحدة', price: 194},
+      2: {label: 'عبوتان', price: 249},
+      3: {label: '3 عبوات', price: 279}
+    }
+  },
   'SHILAJIT-PLUS': {
     product: 'SHILAJIT+',
     packages: {
