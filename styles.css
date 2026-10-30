@@ -1199,3 +1199,87 @@
     max-height:none;
   }
 }
+
+/* ===== Premium fixed order CTA · 2026-10-30 ===== */
+.sticky-order{
+  position:fixed;
+  z-index:1000;
+  right:50%;
+  bottom:calc(12px + env(safe-area-inset-bottom,0px));
+  transform:translate(50%,0);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  width:min(560px,calc(100% - 24px));
+  min-height:62px;
+  padding:10px 18px;
+  border:1px solid #d8b77b;
+  border-radius:17px;
+  background:linear-gradient(112deg,#54203f 0%,#76285f 55%,#93436f 100%);
+  color:#fff;
+  text-decoration:none;
+  font-family:inherit;
+  font-size:15px;
+  font-weight:800;
+  line-height:1.35;
+  box-shadow:0 10px 30px rgba(54,18,43,.30),0 2px 0 rgba(255,255,255,.16) inset;
+  transition:opacity .2s ease,transform .2s ease,visibility .2s ease,box-shadow .2s ease;
+}
+.sticky-order::before{
+  content:"";
+  position:absolute;
+  inset:4px;
+  border:1px solid rgba(255,255,255,.17);
+  border-radius:12px;
+  pointer-events:none;
+}
+.sticky-order__copy,.sticky-order__benefit{position:relative;z-index:1}
+.sticky-order__benefit{
+  color:#f8dfad;
+  font-size:12px;
+  font-weight:700;
+}
+.sticky-order svg{
+  position:relative;
+  z-index:1;
+  width:22px;
+  height:22px;
+  flex:0 0 22px;
+  margin-right:3px;
+}
+.sticky-order:hover{
+  box-shadow:0 13px 34px rgba(54,18,43,.36),0 2px 0 rgba(255,255,255,.16) inset;
+}
+.sticky-order:focus-visible{
+  outline:3px solid #bd9558;
+  outline-offset:4px;
+}
+.sticky-order.is-hidden{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transform:translate(50%,18px);
+}
+body{padding-bottom:88px}
+@media(max-width:600px){
+  .sticky-order{
+    bottom:calc(10px + env(safe-area-inset-bottom,0px));
+    width:calc(100% - 22px);
+    min-height:60px;
+    gap:6px;
+    padding:9px 13px;
+    border-radius:15px;
+    font-size:14px;
+  }
+  .sticky-order__benefit{font-size:11px}
+  .sticky-order svg{width:20px;height:20px;flex-basis:20px}
+  body{padding-bottom:82px}
+}
+@media(max-width:360px){
+  .sticky-order{font-size:13px;gap:5px;padding-inline:10px}
+  .sticky-order__benefit{font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){
+  .sticky-order{transition:none}
+}
