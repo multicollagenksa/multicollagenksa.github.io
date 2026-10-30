@@ -200,6 +200,23 @@
       <p class="purchase-note">توصيل مجاني · الدفع عند الاستلام</p>
     </section>
   </main>
+
+  <a class="sticky-order" href="#order" aria-label="اختاري باقتك الآن والتوصيل علينا">
+    <span class="sticky-order__copy">اختاري باقتك الآن</span>
+    <span class="sticky-order__benefit">والتوصيل علينا</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6"/></svg>
+  </a>
+  <script>
+    (function () {
+      var sticky = document.querySelector('.sticky-order');
+      var checkout = document.getElementById('order');
+      if (!sticky || !checkout || !('IntersectionObserver' in window)) return;
+      var observer = new IntersectionObserver(function (entries) {
+        sticky.classList.toggle('is-hidden', entries[0].isIntersecting);
+      }, { root: null, threshold: 0.12 });
+      observer.observe(checkout);
+    }());
+  </script>
   <script src="app.js?v=20261006-prices" defer></script>
 </body>
 </html>
