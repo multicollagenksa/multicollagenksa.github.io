@@ -84,11 +84,11 @@ form.addEventListener('submit',async e=>{
 
   const name=String(data.get('name')||'').trim();
   const phone=normalizeSaudiPhone(data.get('phone'));
-  const address=String(data.get('address')||'').trim();
+  const address='';
   msg.textContent='';
 
-  if(!name||!phone||!address){
-    msg.textContent=!phone?'فضلاً أدخلي رقم جوال سعودي صحيحًا، مثل 05xxxxxxxx.':'فضلاً أكملي الاسم ورقم الهاتف والعنوان.';
+  if(!name||!phone){
+    msg.textContent=!phone?'فضلاً أدخلي رقم جوال سعودي صحيحًا، مثل 05xxxxxxxx.':'فضلاً أدخلي الاسم الكامل.';
     return;
   }
 
