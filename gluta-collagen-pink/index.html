@@ -32,6 +32,73 @@
       </div>
     </section>
 
+    <section class="order-section" id="order">
+      <div class="order-wrap">
+        <div class="order-head">
+          <span>CHOOSE YOUR ROUTINE</span>
+          <h2>اختاري باقتك…<br>وكلما زادت الكمية زاد التوفير</h2>
+          <p>اختاري العرض المناسب لك ثم أدخلي بيانات التوصيل. الدفع عند الاستلام.</p>
+        </div>
+
+        <form id="order-form" class="order-card">
+          <div class="step-title"><b>1</b><span><strong>اختاري العرض</strong><small>حددي الكمية التي تناسب روتينك</small></span></div>
+
+          <fieldset class="offers">
+            <legend class="visually-hidden">اختاري العرض</legend>
+
+            <label class="offer">
+              <input type="radio" name="offer" value="1">
+              <span class="radio"></span>
+              <span class="info"><strong>باقة البداية</strong><small>1 عبوة</small></span>
+              <span class="price"><b>178 ريال</b><del>399 ريال</del></span>
+            </label>
+
+            <label class="offer">
+              <input type="radio" name="offer" value="2">
+              <span class="radio"></span>
+              <span class="info"><strong>باقة التوفير</strong><small>2 عبوة</small></span>
+              <span class="price"><b>289 ريال</b><small>وفّري 67 ريال</small></span>
+            </label>
+
+            <label class="offer featured">
+              <input type="radio" name="offer" value="3" checked>
+              <span class="badge">الأكثر طلبًا</span>
+              <span class="radio"></span>
+              <span class="info"><strong>الباقة الذهبية</strong><small>3 عبوات</small></span>
+              <span class="price"><b>359 ريال</b><small>وفّري 175 ريال</small></span>
+            </label>
+
+            <label class="offer value">
+              <input type="radio" name="offer" value="5">
+              <span class="badge">أفضل قيمة</span>
+              <span class="radio"></span>
+              <span class="info"><strong>باقة الاستمرارية</strong><small>5 عبوات</small></span>
+              <span class="price"><b>499 ريال</b><small>وفّري 391 ريال</small></span>
+            </label>
+          </fieldset>
+
+          <div class="divider"></div>
+
+          <div class="step-title"><b>2</b><span><strong>بيانات التوصيل</strong><small>تأكدي من الرقم والعنوان قبل الإرسال</small></span></div>
+
+          <div class="fields">
+            <input name="name" autocomplete="name" placeholder="الاسم الكامل" required minlength="2">
+            <input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="رقم هاتف فعال" required>
+            <input name="address" autocomplete="street-address" placeholder="المدينة، الحي والعنوان بالتفصيل" required>
+          </div>
+
+          <div class="confirmation-box">
+            <span>✓</span>
+            <div><b>نؤكد طلبك قبل الشحن</b><small>الرد على اتصال التأكيد يساعد على تجهيز وتوصيل الطلب بسرعة أكبر.</small></div>
+          </div>
+
+          <button class="submit" type="submit">احجزي باقتك الآن — الدفع عند الاستلام</button>
+          <p class="micro">لن يتم شحن الطلب قبل تأكيد بياناتك.</p>
+          <p id="form-message" class="message" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
     <section class="trustbar" aria-label="مزايا الطلب">
       <div><b>✓</b><span><strong>تأكيد قبل الشحن</strong><small>نراجع رقم الهاتف والعنوان معك</small></span></div>
       <div><b>✓</b><span><strong>الدفع عند الاستلام</strong><small>لا تدفعي مسبقًا</small></span></div>
@@ -104,72 +171,7 @@
       </div>
     </section>
 
-    <section class="order-section" id="order">
-      <div class="order-wrap">
-        <div class="order-head">
-          <span>CHOOSE YOUR ROUTINE</span>
-          <h2>اختاري باقتك…<br>وكلما زادت الكمية زاد التوفير</h2>
-          <p>اختاري العرض المناسب لك ثم أدخلي بيانات التوصيل. الدفع عند الاستلام.</p>
-        </div>
 
-        <form id="order-form" class="order-card">
-          <div class="step-title"><b>1</b><span><strong>اختاري العرض</strong><small>حددي الكمية التي تناسب روتينك</small></span></div>
-
-          <fieldset class="offers">
-            <legend class="visually-hidden">اختاري العرض</legend>
-
-            <label class="offer">
-              <input type="radio" name="offer" value="1">
-              <span class="radio"></span>
-              <span class="info"><strong>باقة البداية</strong><small>1 عبوة</small></span>
-              <span class="price"><b>178 ريال</b><del>399 ريال</del></span>
-            </label>
-
-            <label class="offer">
-              <input type="radio" name="offer" value="2">
-              <span class="radio"></span>
-              <span class="info"><strong>باقة التوفير</strong><small>2 عبوة</small></span>
-              <span class="price"><b>289 ريال</b><small>وفّري 67 ريال</small></span>
-            </label>
-
-            <label class="offer featured">
-              <input type="radio" name="offer" value="3" checked>
-              <span class="badge">الأكثر طلبًا</span>
-              <span class="radio"></span>
-              <span class="info"><strong>الباقة الذهبية</strong><small>3 عبوات</small></span>
-              <span class="price"><b>359 ريال</b><small>وفّري 175 ريال</small></span>
-            </label>
-
-            <label class="offer value">
-              <input type="radio" name="offer" value="5">
-              <span class="badge">أفضل قيمة</span>
-              <span class="radio"></span>
-              <span class="info"><strong>باقة الاستمرارية</strong><small>5 عبوات</small></span>
-              <span class="price"><b>499 ريال</b><small>وفّري 391 ريال</small></span>
-            </label>
-          </fieldset>
-
-          <div class="divider"></div>
-
-          <div class="step-title"><b>2</b><span><strong>بيانات التوصيل</strong><small>تأكدي من الرقم والعنوان قبل الإرسال</small></span></div>
-
-          <div class="fields">
-            <input name="name" autocomplete="name" placeholder="الاسم الكامل" required minlength="2">
-            <input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="رقم هاتف فعال" required>
-            <input name="address" autocomplete="street-address" placeholder="المدينة، الحي والعنوان بالتفصيل" required>
-          </div>
-
-          <div class="confirmation-box">
-            <span>✓</span>
-            <div><b>نؤكد طلبك قبل الشحن</b><small>الرد على اتصال التأكيد يساعد على تجهيز وتوصيل الطلب بسرعة أكبر.</small></div>
-          </div>
-
-          <button class="submit" type="submit">احجزي باقتك الآن — الدفع عند الاستلام</button>
-          <p class="micro">لن يتم شحن الطلب قبل تأكيد بياناتك.</p>
-          <p id="form-message" class="message" role="status" aria-live="polite"></p>
-        </form>
-      </div>
-    </section>
 
     <section class="section supplemental-gallery">
       <div class="section-head">
