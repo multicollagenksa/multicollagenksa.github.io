@@ -71,7 +71,7 @@ function doPost(e) {
   try {
     const order = JSON.parse((e && e.postData && e.postData.contents) || '{}');
 
-    ['name', 'phone', 'address'].forEach(key => {
+    ['name', 'phone'].forEach(key => {
       if (!String(order[key] || '').trim()) throw new Error('بيانات طلب ناقصة');
     });
 
