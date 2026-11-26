@@ -132,7 +132,9 @@ form.addEventListener('submit',async e=>{
       price:offer.price,currency:'SAR',
       transaction_id:payload.transactionId,
       client_dedup_id:payload.transactionId,
-      item_ids:[CONFIG.sku]
+      item_ids:[CONFIG.sku],
+      item_category:'Beauty & Personal Care',
+      number_items:offer.code
     });
     form.innerHTML='<div style="text-align:center;padding:34px 12px"><div style="width:54px;height:54px;margin:auto;border-radius:50%;display:grid;place-items:center;background:#e8f5ec;color:#2f7649;font-size:24px;font-weight:800">✓</div><h2>تم استلام طلبك</h2><p style="color:#7b6972;font-size:12px">سنتواصل معك لتأكيد رقم الهاتف والعنوان قبل تجهيز الشحنة.</p></div>';
     sticky?.classList.add('is-hidden');
