@@ -353,19 +353,22 @@ a{-webkit-tap-highlight-color:transparent}
 }
 .value .badge{background:linear-gradient(135deg,#9f7638,#c7a058)}
 .divider{height:1px;background:#eddee4;margin:20px 0 17px}
-.fields{display:grid;gap:9px}
+.fields{display:grid;gap:12px}
 .fields input{
   width:100%;
-  min-height:54px;
-  padding:12px 14px;
-  border:1px solid #ddcbd4;
-  border-radius:13px;
+  min-height:66px;
+  padding:16px 17px;
+  border:1.5px solid #cdb7c1;
+  border-radius:15px;
   outline:none;
   background:#fff;
   color:var(--ink);
   font:inherit;
-  font-size:13px;
+  font-size:16px;
+  font-weight:500;
 }
+.fields input::placeholder{color:#806b76;opacity:1}
+.fields input:focus{border-color:var(--pink);box-shadow:0 0 0 4px rgba(190,18,84,.10)}
 .fields input:focus{border-color:var(--pink);box-shadow:0 0 0 4px rgba(190,18,84,.08)}
 .fields input[type=tel]{direction:rtl;text-align:right}
 .confirmation-box{
@@ -389,7 +392,7 @@ a{-webkit-tap-highlight-color:transparent}
 .confirmation-box small{font-size:8px;color:#6b8172}
 .submit{
   width:100%;
-  min-height:56px;
+  min-height:62px;
   margin-top:12px;
   border:0;
   border-radius:14px;
